@@ -1,0 +1,158 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Fiverr-like custom styles */
+@layer base {
+  :root {
+    --fiverr-green: #1dbf73;
+    --fiverr-dark-green: #19a463;
+    --fiverr-light-green: #e8f5e8;
+    --fiverr-gray: #404145;
+    --fiverr-light-gray: #f7f7f7;
+    --fiverr-border: #e4e5e7;
+  }
+}
+
+@layer components {
+  /* Fiverr-style buttons */
+  .btn-primary {
+    @apply bg-[#1dbf73] hover:bg-[#19a463] text-white font-semibold py-3 px-6 rounded-md transition-all duration-200 transform hover:scale-105;
+  }
+  
+  .btn-secondary {
+    @apply bg-white hover:bg-gray-50 text-[#404145] font-semibold py-3 px-6 rounded-md border border-[#e4e5e7] transition-all duration-200;
+  }
+  
+  .btn-outline {
+    @apply bg-transparent hover:bg-[#1dbf73] text-[#1dbf73] hover:text-white font-semibold py-3 px-6 rounded-md border border-[#1dbf73] transition-all duration-200;
+  }
+  
+  /* Fiverr-style cards */
+  .card {
+    @apply bg-white rounded-lg shadow-sm border border-[#e4e5e7] hover:shadow-md transition-all duration-200;
+  }
+  
+  .card-hover {
+    @apply hover:shadow-lg hover:border-[#1dbf73] transition-all duration-200;
+  }
+  
+  /* Fiverr-style inputs */
+  .input-field {
+    @apply w-full px-4 py-3 border border-[#e4e5e7] rounded-md focus:ring-2 focus:ring-[#1dbf73] focus:border-transparent transition-all duration-200;
+  }
+  
+  /* Fiverr-style headings */
+  .heading-primary {
+    @apply text-[#404145] font-bold;
+  }
+  
+  .heading-secondary {
+    @apply text-[#404145] font-semibold;
+  }
+  
+  /* Fiverr-style text */
+  .text-primary {
+    @apply text-[#404145];
+  }
+  
+  .text-secondary {
+    @apply text-[#62646a];
+  }
+  
+  .text-accent {
+    @apply text-[#1dbf73];
+  }
+  
+  /* Fiverr-style badges */
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  
+  .badge-success {
+    @apply bg-[#e8f5e8] text-[#19a463];
+  }
+  
+  .badge-warning {
+    @apply bg-yellow-100 text-yellow-800;
+  }
+  
+  .badge-info {
+    @apply bg-blue-100 text-blue-800;
+  }
+  
+  /* Fiverr-style navigation */
+  .nav-link {
+    @apply text-[#404145] hover:text-[#1dbf73] font-medium transition-colors duration-200;
+  }
+  
+  .nav-link-active {
+    @apply text-[#1dbf73] font-semibold;
+  }
+  
+  /* Fiverr-style grid layouts */
+  .grid-fiverr {
+    @apply grid gap-6;
+  }
+  
+  .grid-fiverr-2 {
+    @apply grid-cols-1 md:grid-cols-2 gap-6;
+  }
+  
+  .grid-fiverr-3 {
+    @apply grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+  }
+  
+  .grid-fiverr-4 {
+    @apply grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6;
+  }
+  
+  /* Fiverr-style spacing */
+  .section-padding {
+    @apply py-16 px-4 sm:px-6 lg:px-8;
+  }
+  
+  .container-fiverr {
+    @apply max-w-7xl mx-auto;
+  }
+  
+  /* Fiverr-style animations */
+  .fade-in {
+    @apply animate-in fade-in duration-500;
+  }
+  
+  .slide-up {
+    @apply animate-in slide-in-from-bottom-4 duration-500;
+  }
+  
+  /* Hide scrollbars */
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Hide scrollbar for IE, Edge and Firefox */
+  * {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  
+  /* Line clamp utilities */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+/* Smooth transitions */
+* {
+  transition: all 0.2s ease-in-out;
+}
