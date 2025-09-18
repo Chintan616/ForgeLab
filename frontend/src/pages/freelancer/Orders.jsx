@@ -66,15 +66,30 @@ const FreelancerOrders = () => {
   const handleStatusUpdate = async (orderId, newStatus) => {
     try {
       console.log('Updating order status:', { orderId, newStatus });
+      
+      // Optimistically update the local state first for immediate UI feedback
+      setOrders(prevOrders => 
+        prevOrders.map(order => 
+          order._id === orderId 
+            ? { ...order, status: newStatus }
+            : order
+        )
+      );
+      
       const response = await api.patch(`/orders/${orderId}/status`, { status: newStatus });
       console.log('Status update response:', response);
       toast.success('Order status updated successfully');
-      fetchOrders(); // Refresh the orders list
+      
+      // Refresh the orders list to ensure data consistency
+      fetchOrders();
     } catch (error) {
       console.error('Error updating order status:', error);
       console.error('Error response:', error.response);
       const errorMessage = error.response?.data?.message || 'Failed to update order status';
       toast.error(errorMessage);
+      
+      // Revert the optimistic update on error
+      fetchOrders();
     }
   };
 
@@ -286,15 +301,22 @@ const FreelancerOrders = () => {
                       {/* Delivery Date */}
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
-                          <span className={`text-sm ${isOverdue ? 'text-red-600' : 'text-gray-900'}`}>
+                          <span className={`text-sm font-medium ${
+                            order.status === 'pending' 
+                              ? 'text-red-600' 
+                              : 'text-green-600'
+                          }`}>
                             {deliveryDate.toLocaleDateString('en-US', { 
                               day: 'numeric', 
                               month: 'long', 
                               year: 'numeric' 
                             })}
                           </span>
-                          {isOverdue && (
-                            <HiClock className="ml-2 h-4 w-4 text-red-500" title="Overdue" />
+                          {order.status === 'pending' && (
+                            <HiClock className="ml-2 h-4 w-4 text-red-500" title="Pending" />
+                          )}
+                          {order.status === 'delivered' && (
+                            <HiCheck className="ml-2 h-4 w-4 text-green-500" title="Delivered" />
                           )}
                         </div>
                       </td>

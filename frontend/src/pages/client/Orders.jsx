@@ -14,12 +14,14 @@ import {
 } from 'react-icons/hi';
 import api from '../../utils/api';
 import toast from 'react-hot-toast';
+import FreelancerModal from '../../components/FreelancerModal';
 
 const ClientOrders = () => {
   const { user } = useAuth();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
+  const [freelancerModal, setFreelancerModal] = useState({ isOpen: false, freelancerId: null });
 
   useEffect(() => {
     fetchOrders();
@@ -59,6 +61,14 @@ const ClientOrders = () => {
 
   const getStatusText = (status) => {
     return status.replace('_', ' ').charAt(0).toUpperCase() + status.replace('_', ' ').slice(1);
+  };
+
+  const handleFreelancerClick = (freelancerId) => {
+    setFreelancerModal({ isOpen: true, freelancerId });
+  };
+
+  const closeFreelancerModal = () => {
+    setFreelancerModal({ isOpen: false, freelancerId: null });
   };
 
   const filteredOrders = orders.filter(order => {
@@ -213,9 +223,12 @@ const ClientOrders = () => {
                             </div>
                           </div>
                           <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">
+                            <button
+                              onClick={() => handleFreelancerClick(order.freelancer?._id || order.gig?.freelancer?._id)}
+                              className="text-sm font-medium text-gray-900 hover:text-blue-600 hover:underline cursor-pointer text-left"
+                            >
                               {order.freelancer?.name || order.gig?.freelancer?.name || 'Unknown Freelancer'}
-                            </div>
+                            </button>
                             <div className="text-sm text-gray-500">
                               {order.freelancer?.email || order.gig?.freelancer?.email || 'No email'}
                             </div>
@@ -312,6 +325,13 @@ const ClientOrders = () => {
           </div>
         </div>
       )}
+
+      {/* Freelancer Modal */}
+      <FreelancerModal
+        isOpen={freelancerModal.isOpen}
+        onClose={closeFreelancerModal}
+        freelancerId={freelancerModal.freelancerId}
+      />
     </div>
   );
 };

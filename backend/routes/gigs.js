@@ -48,7 +48,7 @@ router.post('/', authMiddleware, roleMiddleware('freelancer'), async (req, res) 
 // Get all active gigs with optional filters (for clients)
 router.get('/', async (req, res) => {
   try {
-    const gigs = await Gig.find({ isActive: true }).populate('freelancer', 'name rating');
+    const gigs = await Gig.find({ isActive: true }).populate('freelancer', 'name profile');
     res.json(gigs);
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
@@ -73,7 +73,7 @@ router.get('/freelancer', authMiddleware, roleMiddleware('freelancer'), async (r
 router.get('/:id', async (req, res) => {
   try {
     console.log('Fetching gig by ID:', req.params.id);
-    const gig = await Gig.findById(req.params.id).populate('freelancer', 'name rating');
+    const gig = await Gig.findById(req.params.id).populate('freelancer', 'name profile');
     if (!gig) return res.status(404).json({ message: 'Gig not found' });
     
     // Check if gig is active (for client access)

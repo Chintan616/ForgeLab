@@ -13,6 +13,7 @@ import {
 } from 'react-icons/hi';
 import api from '../../utils/api';
 import toast from 'react-hot-toast';
+import FreelancerModal from '../../components/FreelancerModal';
 
 const GigDetail = () => {
   const { id } = useParams();
@@ -27,6 +28,7 @@ const GigDetail = () => {
   const [showRatingForm, setShowRatingForm] = useState(false);
   const [ratingForm, setRatingForm] = useState({ rating: 0, comment: '' });
   const [ratingLoading, setRatingLoading] = useState(false);
+  const [freelancerModal, setFreelancerModal] = useState({ isOpen: false, freelancerId: null });
 
   useEffect(() => {
     fetchGig();
@@ -203,6 +205,14 @@ const GigDetail = () => {
     setRatingForm(prev => ({ ...prev, rating: newRating }));
   };
 
+  const handleFreelancerClick = (freelancerId) => {
+    setFreelancerModal({ isOpen: true, freelancerId });
+  };
+
+  const closeFreelancerModal = () => {
+    setFreelancerModal({ isOpen: false, freelancerId: null });
+  };
+
   const renderStars = (rating, interactive = false, size = 'h-5 w-5') => {
     return (
       <div className="flex items-center">
@@ -325,9 +335,12 @@ const GigDetail = () => {
               </div>
               
               <div className="flex-1">
-                <h3 className="text-lg font-medium text-gray-900">
+                <button
+                  onClick={() => handleFreelancerClick(gig.freelancer?._id)}
+                  className="text-lg font-medium text-gray-900 hover:text-blue-600 hover:underline cursor-pointer text-left"
+                >
                   {gig.freelancer?.name || 'ForgeLab'}
-                </h3>
+                </button>
                 <div className="flex items-center space-x-4 text-sm text-gray-500">
                   <span className="flex items-center">
                     <HiStar className="h-4 w-4 text-yellow-400 mr-1" />
@@ -579,6 +592,13 @@ const GigDetail = () => {
           </div>
         </div>
       </div>
+
+      {/* Freelancer Modal */}
+      <FreelancerModal
+        isOpen={freelancerModal.isOpen}
+        onClose={closeFreelancerModal}
+        freelancerId={freelancerModal.freelancerId}
+      />
     </div>
   );
 };

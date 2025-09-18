@@ -4,6 +4,7 @@ import { HiSearch, HiFilter, HiStar, HiCurrencyDollar, HiClock, HiHeart } from '
 import { useAuth } from '../../context/AuthContext';
 import api from '../../utils/api';
 import toast from 'react-hot-toast';
+import FreelancerModal from '../../components/FreelancerModal';
 
 const BrowseGigs = () => {
   const { user } = useAuth();
@@ -14,6 +15,7 @@ const BrowseGigs = () => {
   const [priceRange, setPriceRange] = useState({ min: '', max: '' });
   const [sortBy, setSortBy] = useState('newest');
   const [wishlist, setWishlist] = useState([]);
+  const [freelancerModal, setFreelancerModal] = useState({ isOpen: false, freelancerId: null });
 
   const categories = [
     'All Categories',
@@ -104,6 +106,14 @@ const BrowseGigs = () => {
       console.error('Error updating wishlist:', error);
       toast.error('Failed to update wishlist');
     }
+  };
+
+  const handleFreelancerClick = (freelancerId) => {
+    setFreelancerModal({ isOpen: true, freelancerId });
+  };
+
+  const closeFreelancerModal = () => {
+    setFreelancerModal({ isOpen: false, freelancerId: null });
   };
 
   if (loading) {
@@ -227,9 +237,12 @@ const BrowseGigs = () => {
                     </span>
                   </div>
                   <div className="ml-3 flex-1">
-                    <p className="text-sm font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                    <button
+                      onClick={() => handleFreelancerClick(gig.freelancer?._id)}
+                      className="text-sm font-semibold text-gray-900 group-hover:text-blue-600 transition-colors hover:underline cursor-pointer text-left"
+                    >
                       {gig.freelancer?.name || 'ForgeLab'}
-                    </p>
+                    </button>
                     <div className="flex items-center text-sm text-gray-500">
                       <div className="flex items-center">
                         <HiStar className="h-4 w-4 text-yellow-400 fill-current mr-1" />
@@ -332,6 +345,13 @@ const BrowseGigs = () => {
           </button>
         </div>
       )}
+
+      {/* Freelancer Modal */}
+      <FreelancerModal
+        isOpen={freelancerModal.isOpen}
+        onClose={closeFreelancerModal}
+        freelancerId={freelancerModal.freelancerId}
+      />
     </div>
   );
 };

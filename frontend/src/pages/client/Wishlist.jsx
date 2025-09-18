@@ -12,11 +12,13 @@ import {
 } from 'react-icons/hi';
 import api from '../../utils/api';
 import toast from 'react-hot-toast';
+import FreelancerModal from '../../components/FreelancerModal';
 
 const Wishlist = () => {
   const { user } = useAuth();
   const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [freelancerModal, setFreelancerModal] = useState({ isOpen: false, freelancerId: null });
 
   useEffect(() => {
     fetchWishlist();
@@ -43,6 +45,14 @@ const Wishlist = () => {
       console.error('Error removing from wishlist:', error);
       toast.error('Failed to remove from wishlist');
     }
+  };
+
+  const handleFreelancerClick = (freelancerId) => {
+    setFreelancerModal({ isOpen: true, freelancerId });
+  };
+
+  const closeFreelancerModal = () => {
+    setFreelancerModal({ isOpen: false, freelancerId: null });
   };
 
   if (loading) {
@@ -79,9 +89,12 @@ const Wishlist = () => {
                     </span>
                   </div>
                   <div className="ml-3">
-                    <p className="text-sm font-medium text-gray-900">
+                    <button
+                      onClick={() => handleFreelancerClick(gig.freelancer?._id)}
+                      className="text-sm font-medium text-gray-900 hover:text-blue-600 hover:underline cursor-pointer text-left"
+                    >
                       {gig.freelancer?.name || 'Freelancer'}
-                    </p>
+                    </button>
                     <div className="flex items-center text-sm text-gray-500">
                       <HiStar className="h-4 w-4 text-yellow-400 fill-current mr-1" />
                       <span>{gig.averageRating || 0}</span>
@@ -172,6 +185,13 @@ const Wishlist = () => {
           </div>
         </div>
       )}
+
+      {/* Freelancer Modal */}
+      <FreelancerModal
+        isOpen={freelancerModal.isOpen}
+        onClose={closeFreelancerModal}
+        freelancerId={freelancerModal.freelancerId}
+      />
     </div>
   );
 };
